@@ -1,6 +1,6 @@
 public interface ArrowsInteraction {
 
-    void meetBall();
+    void meetChar();
 
     void meetShield();
     
