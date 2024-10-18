@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Random;
+
 import javax.swing.*;
 
 public class FrameOfGame implements ActionListener {
@@ -9,15 +11,20 @@ public class FrameOfGame implements ActionListener {
     JLabel label;
     Shield shield;
     Character character;
+    MagicArrow magicArrow;
     int angle = 0;
+    Random random;
+    Ball ball;
+    public int frameSize = 400;
 
     public FrameOfGame() {
+
         frame = new JFrame();
         frame.setLayout(new BorderLayout());
         frame.setTitle("Defense");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
-        frame.setSize(400, 400);
+        frame.setSize(frameSize, frameSize);
 
         button = new JButton("Start Game");
         button.setFont(new Font("Arial", Font.BOLD, 12));
@@ -35,14 +42,19 @@ public class FrameOfGame implements ActionListener {
 
 
         shield = new Shield();
-        shield.setBounds(0, 0, 400, 400);  
+        shield.setBounds(0, 0, frameSize, frameSize);  
         shield.setVisible(false);
         panel.add(shield);
 
         character = new Character();
-        character.setBounds(0, 0, 400, 400);
+        character.setBounds(0, 0, frameSize, frameSize);
         character.setVisible(false);
         panel.add(character);
+
+        magicArrow = new MagicArrow();
+        magicArrow.setBounds(0, 0, frameSize, frameSize);
+        magicArrow.setVisible(false); 
+        panel.add(magicArrow);
 
         frame.add(panel);
 
@@ -78,7 +90,8 @@ public class FrameOfGame implements ActionListener {
     public void gameStageFrame() {
         
         shield.setVisible(true);
-        character.setVisible(true); // Ensure the shield is visible
+        character.setVisible(true); 
+        magicArrow.setVisible(true);
 
         panel.revalidate();
         panel.repaint();
@@ -92,6 +105,11 @@ public class FrameOfGame implements ActionListener {
             panel.repaint();
             gameStageFrame();
         }
+    }
+
+    public void newBall() {
+        random = new Random();
+		ball = new Ball((frameSize/2)-(20/2),random.nextInt(frameSize-20),20,20);
     }
 
     public static void main(String[] args) {
