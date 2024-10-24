@@ -19,7 +19,7 @@ class MagicArrow extends RotatableArrow {
     @Override
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.BLUE);
+        g2d.setColor(Color.CYAN);
         g2d.rotate(Math.toRadians(rotation), x + width / 2.0, y + height / 2.0);
         g2d.fillRect(x, y, width, height);
         g2d.rotate(-Math.toRadians(rotation), x + width / 2.0, y + height / 2.0);
@@ -34,7 +34,7 @@ class NorArrow extends RotatableArrow {
     @Override
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.GREEN);
+        g2d.setColor(Color.BLACK);
         g2d.rotate(Math.toRadians(rotation), x + width / 2.0, y + height / 2.0);
         g2d.fillRect(x, y, width, height);
         g2d.rotate(-Math.toRadians(rotation), x + width / 2.0, y + height / 2.0);

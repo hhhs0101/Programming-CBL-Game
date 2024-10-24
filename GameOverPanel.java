@@ -4,19 +4,21 @@ import javax.swing.*;
 
 public class GameOverPanel extends JPanel{
     
-JButton replayButton = new JButton("Replay Game");
+    JButton replayButton;
 
     GameOverPanel(){
 
         this.setLayout(null);
         this.setBackground(Color.WHITE);
-        this.setFont(new Font("Arail", Font.BOLD, 20));
+
+        replayButton = new JButton("Replay Game");
+        replayButton.setFont(new Font("Arial", Font.BOLD, 20));
         replayButton.setBounds(200, 420, 200, 80);
         this.add(replayButton);
 
         JLabel label = new JLabel("Game Over");
         label.setFont(new Font("Arial", Font.BOLD, 50));
-        label.setBounds(125, 100, 350, 50);
+        label.setBounds(165, 100, 270, 50);
         this.add(label);
     }
 

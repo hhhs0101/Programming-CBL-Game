@@ -42,24 +42,7 @@ public class GameFrame extends JFrame {
         this.add(startPanel);
         this.setVisible(true);
 
-}
-    /*void GameOverCount(int hp){
-
-        if(hp == 0){
-
-            GameFrame.this.remove(gamePanel);
-            GameFrame.this.add(gameOverPanel);
-        }
-
-
-        replayButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                GameFrame.this.remove(startPanel);
-                GameFrame.this.add(gamePanel);
-                GameFrame.this.revalidate();
-                gamePanel.requestFocusInWindow();
-                gamePanel.startGame();
-    } */
+    }
+    
 }
 

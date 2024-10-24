@@ -14,6 +14,7 @@ public class GamePanel extends JPanel implements ActionListener {
     Shield shield;
     Random random;
     JLabel stageLabel;
+    Heart heart;
 
     int panelWidth = 600;
     int panelHeight = 600;
@@ -21,7 +22,6 @@ public class GamePanel extends JPanel implements ActionListener {
     int centerY = panelHeight / 2;
     int stage = 0;
     int hp = 5;
-
 
     GamePanel() {
         this.setPreferredSize(new Dimension(panelWidth, panelHeight));
@@ -38,6 +38,8 @@ public class GamePanel extends JPanel implements ActionListener {
         arrows = new ArrayList<>();
         random = new Random();
 
+        heart = new Heart(hp);
+        
         character = new Character(centerX - 10, centerY - 10, 20, 20);
         shield = new Shield();
         shield.setBounds(0, 0, panelWidth, panelHeight);
@@ -48,19 +50,19 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void startGame() {
-
         timer.start();
 
-        arrowTimer = new Timer(1000, e -> spawnArrow());
+        int frequency = 700 - 50 * stage;
+
+        arrowTimer = new Timer(frequency, e -> spawnArrow());
         stopTimer = new Timer(10000, e -> arrowTimer.stop());
         stageTimer = new Timer(14000, e -> nextStage());
         arrowTimer.start();
         stopTimer.start();
         stageTimer.start();
-              
     }
     
-    public void nextStage(){
+    public void nextStage() {
         if (hp > 0) {
             arrowTimer.stop();
             stopTimer.stop();
@@ -73,7 +75,7 @@ public class GamePanel extends JPanel implements ActionListener {
             this.add(stageLabel);
             startGame();
         } else {
-            System.out.println("Game Over");
+            gameOver();
         }
     }
 
@@ -109,9 +111,9 @@ public class GamePanel extends JPanel implements ActionListener {
         boolean magic = random.nextInt(100) < 20; 
         RotatableArrow arrow;
         if (magic) {
-            arrow = new MagicArrow(x, y, 4, 10, rotation);
+            arrow = new MagicArrow(x, y, 8, 20, rotation);
         } else {
-            arrow = new NorArrow(x, y, 4, 10, rotation);
+            arrow = new NorArrow(x, y, 8, 20, rotation);
         }
         arrows.add(arrow);
     }
@@ -124,6 +126,9 @@ public class GamePanel extends JPanel implements ActionListener {
         for (RotatableArrow arrow : arrows) {
             arrow.draw(g);
         }
+        
+        heart.drawHeart(g, hp);
+        
     }
 
     @Override
@@ -136,27 +141,27 @@ public class GamePanel extends JPanel implements ActionListener {
             if (arrow instanceof MagicArrow) {
                 if (arrow.intersects(character)) {
                     iterator.remove(); 
-                    System.out.println("Magic arrow collides with character");
                     continue;
                 }
                 if (shield.intersects(arrow)) {
                     iterator.remove(); 
-                    System.out.println("Magic arrow collides with shield "  + hp);
                     hp--;
                 }
             } else if (arrow instanceof NorArrow) {
                 if (arrow.intersects(character)) {
                     iterator.remove(); 
-                    System.out.println("Normal arrow collides with character " + hp);
                     hp--;
                     continue;
+
                 }
                 if (shield.intersects(arrow)) {
                     iterator.remove(); 
-                    System.out.println("Normal arrow collides with shield");
                 }
             }
 
+        }
+        if (hp <= 0) {
+            gameOver();
         }
         repaint();
     }
@@ -193,5 +198,32 @@ public class GamePanel extends JPanel implements ActionListener {
             }
         }
     }
-}
+    
+    
+    /**
+     * Remove the current GamePanel from the GameFrame and replace it with a GameOverPanel.
+     * Sets up a listener to react button in GameOverPanel, which restart the game by adding a new
+     * GamePanel to the GameFrame.
+     */
+    public void gameOver() {
 
+        JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this); 
+        //find GameFrame contain panel and return it
+        if (parent != null) {
+            parent.remove(this);
+            GameOverPanel gameOverPanel = new GameOverPanel();
+            gameOverPanel.setReplayButtonListener(e -> {
+                parent.remove(gameOverPanel);
+                GamePanel newGamePanel = new GamePanel();
+                parent.add(newGamePanel);
+                newGamePanel.requestFocusInWindow();
+                parent.revalidate();
+                parent.repaint();
+                newGamePanel.startGame();
+            });
+            parent.add(gameOverPanel);
+            parent.revalidate();
+            parent.repaint();
+        }
+    }
+}
