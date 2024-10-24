@@ -1,23 +1,13 @@
-
 import java.awt.*;
-import javax.swing.*;
 
-public class Character extends JComponent {
-    public int circleRadius = 20;
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        drawCharacter(g);
+class Character extends Rectangle {
+    Character(int x, int y, int width, int height) {
+        super(x, y, width, height);
     }
 
-    public void drawCharacter(Graphics g) {
-        
-        int centerX = getWidth() / 2;
-        int centerY = centerX;
-
+    public void draw(Graphics2D g) {
         g.setColor(Color.RED);
-        g.fillOval(centerX - 10, centerY - 10, circleRadius, circleRadius);
-
+        g.fillOval(x, y, width, height);
     }
 }

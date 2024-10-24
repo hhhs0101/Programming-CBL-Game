@@ -1,8 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 
-public class Shield extends JComponent {
-    
+class Shield extends JComponent {
     public int circleRadius = 20;
     private int angle = 0;  
 
@@ -14,16 +13,16 @@ public class Shield extends JComponent {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        drawRotatedRectangle(g);
+        drawRotatedShield(g);
     }
 
-    public void drawRotatedRectangle(Graphics g) {
+    public void drawRotatedShield(Graphics g) {
         Graphics2D s = (Graphics2D) g;
-        int rectWidth = 10;
-        int rectHeight = 40;
+        int shieldWidth = 10;
+        int shieldHeight = 40;
+
         int centerX = getWidth() / 2;
         int centerY = getHeight() / 2;
-
 
         double radian = Math.toRadians(angle);
         int offsetX = (int) (circleRadius * Math.cos(radian));
@@ -32,6 +31,18 @@ public class Shield extends JComponent {
         s.translate(offsetX, offsetY); 
         s.rotate(radian);
         s.setColor(Color.BLACK);
-        s.fillRect(-rectWidth / 2, -rectHeight / 2, rectWidth, rectHeight);  
+        s.drawRect(-shieldWidth / 2, -shieldHeight / 2, shieldWidth, shieldHeight);  
+    }
+
+    public boolean intersects(Rectangle arrow) {
+        int shieldCenterX = getWidth() / 2 + (int) (circleRadius * Math.cos(Math.toRadians(angle)));
+        int shieldCenterY = getHeight() / 2 
+            + (int) (circleRadius * Math.sin(Math.toRadians(angle)));
+        int shieldWidth = 10;
+        int shieldHeight = 10;
+
+        Rectangle shieldBounds = new Rectangle(shieldCenterX - shieldWidth / 2,
+            shieldCenterY - shieldHeight / 2, shieldWidth, shieldHeight);
+        return shieldBounds.intersects(arrow);
     }
 }

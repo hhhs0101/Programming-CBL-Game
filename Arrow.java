@@ -1,37 +1,42 @@
-import java.util.*;
+import java.awt.*;
 
-public class Arrow {
+abstract class RotatableArrow extends Rectangle {
+    int rotation;
 
-
-    long positSeed = System.currentTimeMillis();
-
-    long typeSeed = (System.currentTimeMillis() * System.currentTimeMillis() - 123890);
-
-    Random posRandom = new Random(positSeed);
-
-    Random typeRandom = new Random(typeSeed);
-
-    public void positionOfArrow() {
-
-        int n = posRandom.nextInt(100);
-
-        if (n > 74) {
-            positionTop();
-        } else if (n > 49) {
-            positionBot();
-        } else if (n > 24) {
-            positionRight();
-        } else {
-            positionLeft();
-        }
-
-    }
-    
-    public boolean typeOfArrow(){
-       
-        int i = typeRandom.nextInt(100);
-        int probaMagic = 80 - stageLevel;
-        return i < probaMagic;
+    RotatableArrow(int x, int y, int width, int height, int rotation) {
+        super(x, y, width, height);
+        this.rotation = rotation;
     }
 
+    public abstract void draw(Graphics g);
+}
+
+class MagicArrow extends RotatableArrow {
+    MagicArrow(int x, int y, int width, int height, int rotation) {
+        super(x, y, width, height, rotation);
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.BLUE);
+        g2d.rotate(Math.toRadians(rotation), x + width / 2.0, y + height / 2.0);
+        g2d.fillRect(x, y, width, height);
+        g2d.rotate(-Math.toRadians(rotation), x + width / 2.0, y + height / 2.0);
+    }
+}
+
+class NorArrow extends RotatableArrow {
+    NorArrow(int x, int y, int width, int height, int rotation) {
+        super(x, y, width, height, rotation);
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.GREEN);
+        g2d.rotate(Math.toRadians(rotation), x + width / 2.0, y + height / 2.0);
+        g2d.fillRect(x, y, width, height);
+        g2d.rotate(-Math.toRadians(rotation), x + width / 2.0, y + height / 2.0);
+    }
 }

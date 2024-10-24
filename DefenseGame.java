@@ -1,6 +1,5 @@
-public class DefenseGame {
-    
+class DefeseGame {
     public static void main(String[] args) {
-        new FrameOfGame();
+        new GameFrame();
     }
 }
