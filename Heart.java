@@ -5,12 +5,10 @@ public class Heart {
     
     Image heartImage;
 
-    // Constructor to initialize the heart image
-    public Heart(int initialHp) {
+    public Heart() {
         heartImage = new ImageIcon("Heart.png").getImage();
     }
 
-    // Method to draw hearts representing the player's current hp
     public void drawHeart(Graphics g, int hp) {
         int heartWidth = 100;
         int heartHeight = 100;

@@ -6,7 +6,7 @@ public class GameOverPanel extends JPanel{
     
     JButton replayButton;
 
-    GameOverPanel(){
+    GameOverPanel() {
 
         this.setLayout(null);
         this.setBackground(Color.WHITE);

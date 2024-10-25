@@ -29,7 +29,7 @@ public class GamePanel extends JPanel implements ActionListener {
         this.setFocusable(true);
         this.requestFocusInWindow();
         this.setLayout(null);
-        stageLabel = new JLabel("Stage:" + stage);
+        stageLabel = new JLabel("Stage:" + (stage + 1));
         stageLabel.setFont(new Font("Arial", Font.BOLD, 20));
         stageLabel.setBounds(0, 0, 100, 24);
         this.add(stageLabel);
@@ -38,7 +38,7 @@ public class GamePanel extends JPanel implements ActionListener {
         arrows = new ArrayList<>();
         random = new Random();
 
-        heart = new Heart(hp);
+        heart = new Heart();
         
         character = new Character(centerX - 10, centerY - 10, 20, 20);
         shield = new Shield();
@@ -84,36 +84,38 @@ public class GamePanel extends JPanel implements ActionListener {
         int x = 0;
         int y = 0;
         int rotation = 0;
+        int arrowWidth = 8;
+        int arrowHeight = 20;
 
         switch (position) {
             case 0: 
-                x = centerX - 2;
+                x = centerX - arrowWidth / 2;
                 y = 0;
                 rotation = 0;
                 break;
             case 1: 
-                x = centerX - 2;
-                y = panelHeight - 5;
+                x = centerX - arrowWidth / 2;
+                y = panelHeight - arrowHeight / 2;
                 rotation = 180;
                 break;
             case 2: 
                 x = 0;
-                y = centerY - 5;
+                y = centerY - arrowHeight / 2;
                 rotation = 90;
                 break;
             case 3: 
-                x = panelWidth - 2;
-                y = centerY - 5;
+                x = panelWidth - arrowWidth / 2;
+                y = centerY - arrowHeight / 2;
                 rotation = 270;
                 break;
         }
 
-        boolean magic = random.nextInt(100) < 20; 
+        boolean magic = random.nextInt(100) < 20 + 2 * stage; 
         RotatableArrow arrow;
         if (magic) {
-            arrow = new MagicArrow(x, y, 8, 20, rotation);
+            arrow = new MagicArrow(x, y, arrowWidth, arrowHeight, rotation);
         } else {
-            arrow = new NorArrow(x, y, 8, 20, rotation);
+            arrow = new NorArrow(x, y, arrowWidth, arrowHeight, rotation);
         }
         arrows.add(arrow);
     }
@@ -138,27 +140,19 @@ public class GamePanel extends JPanel implements ActionListener {
             RotatableArrow arrow = iterator.next();
             moveArrow(arrow);
             
-            if (arrow instanceof MagicArrow) {
-                if (arrow.intersects(character)) {
-                    iterator.remove(); 
-                    continue;
-                }
-                if (shield.intersects(arrow)) {
-                    iterator.remove(); 
+            if (arrow.intersects(character)) {
+                iterator.remove();
+                if (arrow instanceof NorArrow) {
                     hp--;
                 }
-            } else if (arrow instanceof NorArrow) {
-                if (arrow.intersects(character)) {
-                    iterator.remove(); 
+                continue;
+            }
+            if (shield.intersects(arrow)) {
+                iterator.remove();
+                if (arrow instanceof MagicArrow) {
                     hp--;
-                    continue;
-
-                }
-                if (shield.intersects(arrow)) {
-                    iterator.remove(); 
                 }
             }
-
         }
         if (hp <= 0) {
             gameOver();
@@ -208,7 +202,6 @@ public class GamePanel extends JPanel implements ActionListener {
     public void gameOver() {
 
         JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this); 
-        //find GameFrame contain panel and return it
         if (parent != null) {
             parent.remove(this);
             GameOverPanel gameOverPanel = new GameOverPanel();
